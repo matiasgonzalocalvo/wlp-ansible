@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="{{ server_description | default('new server') }}">
+
+  <featureManager>
+{% for lib in server.featuremanager %}
+    <feature>{{ lib }}</feature>
+{% endfor %}
+  </featureManager>
+  <httpEndpoint 
+    id="{{ server.httpendpoint.id | default('defaultHttpEndpoint') }}" 
+    httpPort="{{ server.httpendpoint.httpport }}" 
+    httpsPort="{{ server.httpendpoint.httpsport }}"
+    host="{{ server.httpendpoint.host | default('*') }}"
+  />
+
+
+  <applicationManager 
+    autoExpand="{{ server.applicationmanager.autoexpand | default('true') }}"
+{% if applicationmanager_starttimeout is defined %}
+    startTimeout="{{ server.applicationmanager.starttimeout }}"
+{% endif %}
+{% if applicationmanager_stoptimeout is defined %}
+    stopTimeout="{{ server.applicationmanager.stoptimeout | default('3000s') }}" 
+{% endif %}
+  />
+
+  <applicationMonitor updateTrigger="mbean" />
+
+  <keyStore id="{{ server.keyStore.id | default('SSLKeyStore') }}" location="{{ server.keyStore.location | default('/opt/IBM/wlp/usr/shared/resources/security/KeySore.jks') }}" password="{{ server.keyStore.password }}" type="{{ server.keyStore.type | default('JKS') }}" />
+  <ssl id="{{ server.ssl.id | default('SSLConfig') }}" keyStoreRef="{{ server.ssl.keyStoreRef | default('SSLKeyStore') }}" serverKeyAlias="{{ server.ssl.serverKeyAlias | default(ansible_hostname)}}" sslProtocol="{{ server.ssl.sslProtocol | default('TLSv1.2') }}" /> 
+  <sslDefault sslRef="{{ server.sslDefault.sslRef | default('SSLConfig') }}" />
+
+  <include optional="true" location="${as_config_dir}/authData.xml"/>
+  <include optional="true" location="${as_config_dir}/jdbc.xml"/>
+  <include optional="true" location="${as_config_dir}/ds.xml"/>
+  <include optional="true" location="/opt/IBM/wlp/usr/shared/config/ldap/ldap.xml" reuseConnection="true"/>
+
+ </server>

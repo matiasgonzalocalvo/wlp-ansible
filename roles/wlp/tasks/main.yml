@@ -1,0 +1,80 @@
+---
+# tasks file for wlp
+#
+
+- name: Check "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}" exist
+  stat:
+    path: "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}"
+  register: stat_server_home
+
+- name: Create "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}"
+  file:
+    path: "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}"
+    state: directory
+    mode: 0770
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+  when: stat_server_home.stat.exists == False
+
+
+- name: Check "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}/as_config" exist
+  stat:
+    path: "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}/as_config"
+  register: stat_as_config
+
+- name: Create "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}/as_config"
+  file:
+    path: "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}/as_config"
+    state: directory
+    mode: 0770
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+  when: stat_as_config.stat.exists == False
+
+
+
+- name: Copy server.xml template to "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}/server.xml"
+  template:
+    src: "templates/server.xml.j2"
+    dest: "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}/server.xml"
+    mode: 0660
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    backup: yes
+
+- name: Copy as_config/jdbc.xml template to "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}/as_config/jdbc.xml"
+  template:
+    src: "as_config/jdbc.xml.j2"
+    dest: "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}/as_config/jdbc.xml"
+    mode: 0660
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    backup: yes
+
+- name: Copy as_config/ds.xml.j2 template to "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}/as_config/ds.xml"
+  template:
+    src: "as_config/ds.xml.j2"
+    dest: "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}/as_config/ds.xml"
+    mode: 0660
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    backup: yes
+
+- name: Copy as_config/shared-library.xml.j2 template to "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}/as_config/shared-library.xml"
+  template:
+    src: "as_config/shared-library.xml.j2"
+    dest: "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}/as_config/shared-library.xml"
+    mode: 0660
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    backup: yes
+
+- name: Copy as_config/context.xml.j2 template to "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}/as_config/context.xml"
+  template:
+    src: "as_config/context.xml.j2"
+    dest: "{{ wlp_path_name }}/{{ wlp_path_server }}/{{ APP_JVM }}/as_config/context.xml"
+    mode: 0660
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    backup: yes
+

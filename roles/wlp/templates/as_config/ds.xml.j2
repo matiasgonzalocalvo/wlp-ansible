@@ -1,0 +1,32 @@
+<server>
+
+{% for dataSource in ds %}
+
+  <dataSource 
+    id="{{ dataSource.id }}"
+    jndiName="{{ dataSource.jndiName }}"
+    {% if dataSource.type is defined %}
+      type="{{ dataSource.type }}"
+    {% endif %}
+  >
+
+    <jdbcDriver 
+      libraryRef="{{ dataSource.jndiName }}"
+      {% if dataSource.type is defined %}
+        javax.sql.XADataSource="{{ dataSource.javax_sql_XADataSource }}"
+      {% endif %}
+    />
+
+    <{{ dataSource.properties }}
+      databaseName="{{ dataSource.databaseName }}"
+      password="{{ dataSource.password }}"
+      PortNumber="{{ dataSource.PortNumber }}"
+      serverName="{{ dataSource.serverName }}"
+      user="{{ dataSource.user }}"
+    />
+
+  </dataSource>
+
+{% endfor %}
+
+</server>

@@ -1,0 +1,90 @@
+---
+APP_JVM: "nombreapp"
+wlp_path_name: "/opt/IBM/wlp/"
+wlp_path_server: "/usr/servers/"
+
+
+#owner: wasadm
+#group: wasgrp
+
+owner: mgcalvo
+group: mgcalvo
+
+#- name: project
+server:
+  path_to_war: /tmp/project.war
+  featuremanager:
+    - jaxrs-2.0
+    - jsonp-1.0
+  httpendpoint:
+    id: "defaultHttpEndpoint"
+    httpport: "9080"
+    httpsport: "9443"
+    host: "*"
+  applicationmanager:
+    autoexpand: "true"
+    starttimeout: "3000s"
+    stoptimeout: "3000s"
+  keyStore:
+    id: "SSLKeyStore"
+    location: "/opt/IBM/wlp/usr/shared/resources/security/KeySore.jks"
+    password: "unapassword"
+    type: "JKS"
+  ssl:
+    id: "SSLConfig"
+    keyStoreRef: "SSLKeyStore"
+    serverKeyAlias: "ard951vlncap"
+    sslProtocol: "TLSv1.2"
+  sslDefault:
+    sslRef: "SSLConfig"
+
+jdbc:
+  - mssql:
+    id: "MSJDBCLib"
+    fileset:
+      dir: "/opt/IBM/wlp/usr/commons_libs/mssql/"
+      includes: "sqljdbc4-1.0.jar"
+ds:
+  - ds1:
+    id: "dscomisiones"
+    jndiName: "jdbc/dsSfeServices"
+    type: "javax.sql.XADataSource"
+    libraryRef: "MSJDBCLib"
+    javax_sql_XADataSource: "com.microsoft.sqlserver.jdbc.SQLServerXADataSource"
+    properties: "properties.micrososft.sqlserver"
+    databaseName: "BR"
+    password: "${BR_AUTH}"
+    PortNumber: "1633"
+    serverName: "ARW20019495"
+    user: "sis_app_banca"
+
+shared_library:
+  - shared1:
+    id: "commons_libs"
+    fileset:
+      - 1:
+        dir: "/opt/IBM/wlp/usr/commons_libs/jars/"
+        includes: "*.jar"
+        scanInterval: "5s"
+      - 2:
+        dir: "/opt/IBM/wlp/usr/commons_libs/jars/"
+        includes: "*.dtd"
+  - shared2:
+    id: "APP-shared-library"
+    fileset:
+      - 1:
+        dir: "/opt/IBM/wlp/usr/servers/${wlp.server.name}/shared-library/"
+        includes: "*.jar"
+        scanInterval: "5s"
+      - 2:
+        dir: "/opt/IBM/wlp/usr/servers/${wlp.server.name}/shared-library/"
+        includes: "*.dtd"
+        scanInterval: "5s"
+context:
+  - jndi1:
+    jndiName: "HSBC/HBAR/SFE_PROFILE"
+    value: "DESA"
+    id: "desa"
+#  - jndi2:
+#    jndiName: "HSBC/HBAR/SFE"
+#    value: "PRUEBA"

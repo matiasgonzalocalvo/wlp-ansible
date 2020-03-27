@@ -1,0 +1,10 @@
+<server>
+{% for library in jdbc %}
+  <library id="{{ library.id }}">
+    <fileset 
+      dir="{{ library.fileset.dir }}"
+      includes="{{ library.fileset.includes }}"
+    />
+  </library>
+{% endfor %}
+</server>

@@ -1,0 +1,12 @@
+<server>
+
+{% for library in shared_library  %}
+
+  <library id="{{ library.id }}">
+    {% for fileset in library.fileset  %}
+      <fileset dir="{{ fileset.dir }}" includes="{{ fileset.includes }}" {% if fileset.scanInterval is defined %} scanInterval="{{ fileset.scanInterval }}" {% endif %} />
+    {% endfor %}
+{% endfor %}
+  </library>
+
+</server>

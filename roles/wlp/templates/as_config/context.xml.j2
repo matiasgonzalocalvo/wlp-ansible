@@ -1,0 +1,5 @@
+<server>
+{% for con in context  %}
+  <jndiEntry jndiName="{{ con.jndiName }}" value="{{ con.value }}" {% if con.id is defined %} id="{{ con.id }}" {% endif %} />
+{% endfor %}
+</server>

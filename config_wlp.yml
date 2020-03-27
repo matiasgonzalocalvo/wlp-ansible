@@ -1,0 +1,4 @@
+--- 
+- hosts: wlp_server 
+  roles:
+  - {role: "wlp"}
